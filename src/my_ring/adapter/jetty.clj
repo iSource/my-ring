@@ -3,6 +3,24 @@
            (org.eclipse.jetty.server.handler AbstractHandler))
   (:use my-ring.util.servlet))
 
+#_(defn- add-ssl-connector!
+  [server options]
+  (let [ssl-connector (SslSocketConnector.)]
+    (doto ssl-connector
+      (.setPort (options :ssl-port 443))
+      (.setKeystore (options :keystore))
+      (.setKeyPassword (options :key-password)))
+    (when-let [truststroe (options :truststroe)]
+      (.setTrustStroe ssl-connector truststore))
+    (when-let [trust-password (options :trust-password)]
+      (.setTrustPassword ssl-connector trust-password))))
+
+(defn- create-server
+  [options]
+  (let [port (options :port 3000)]
+    (doto
+      (Server. port))))
+
 (defn- proxy-handler
   [handler]
   (proxy [AbstractHandler] []
@@ -14,12 +32,10 @@
 
 (defn run-jetty
   ([app options]
-    (let [port (or (:port options) 3000)
-          server (Server. port)
-          handler (proxy-handler app)]
-      (.setHandler server handler)
-      (.start server)
-      (.join server)))
+    (doto (create-server options)
+      (.setHandler (proxy-handler app))
+      (.start)
+      (.join)))
   ([app]
    (run-jetty app {})))
 
