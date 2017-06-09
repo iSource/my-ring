@@ -34,7 +34,7 @@
    :body "<h1>Not File I'm APP</h1>"})
 
 (defn wrap
-  [#^File dir app]
+  [app #^File dir]
   (ensure-dir dir)
   (fn [request]
     (if (#{:get :head} (:request-method request))
@@ -50,7 +50,3 @@
               (success file)
               (app request)))))
       (app request))))
-
-
-(defn -main [& args]
-  (jetty/run-jetty (->> app (wrap (java.io.File. "resources"))) {:port 3000}))

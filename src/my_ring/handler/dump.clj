@@ -110,10 +110,3 @@ table.trace td.even {
    :headers {"Content-Type" "text/html"}
    :body (template req)})
 
-#_(defn app [req]
-  {:status 200
-   :body "<h1>Changed</h1>"})
-
-(defn -main
-  [& args]
-  (jetty/run-jetty app {:port 3000}))

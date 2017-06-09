@@ -23,6 +23,6 @@
           :query-params {"foo" "马建建"}
           :form-params {"woo" "gua", "ka" "我的"}
           :params {"foo" "马建建", "woo" "gua", "ka" "我的"}}
-         ((wrap-params true identity) {:query-string "foo=bar&foo=%e9%a9%ac%e5%bb%ba%e5%bb%ba"
+         ((wrap-params identity true) {:query-string "foo=bar&foo=%e9%a9%ac%e5%bb%ba%e5%bb%ba"
                                   :content-type "application/x-www-form-urlencoded"
                                   :body body-override}))))

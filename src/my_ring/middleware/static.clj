@@ -3,9 +3,9 @@
             [clojure.string :as str]))
 
 (defn wrap
-  [public-dir static app]
+  [app public-dir static]
   (fn [req]
-    (let [file-app (->> app (file/wrap public-dir))
+    (let [file-app (-> app (file/wrap public-dir))
           uri (:uri req)]
       (if (some #(str/starts-with? uri %) static)
         (file-app req)

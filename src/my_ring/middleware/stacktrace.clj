@@ -113,6 +113,3 @@ table.trace td.header {
       (app request)
       (catch Exception e
         (response request e)))))
-
-(defn -main [& args]
-  (jetty/run-jetty (-> app wrap) {:port 3000}))

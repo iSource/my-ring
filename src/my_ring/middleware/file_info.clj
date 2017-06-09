@@ -71,7 +71,7 @@
   (if (> (rand-int 10) 5) (/ 1 0)))
 
 (defn wrap
-  ([custom-mime-types app]
+  ([app custom-mime-types]
    (let [mime-types (merge base-mime-types custom-mime-types)]
     (fn [req]
       #_(rand-gen-error)
@@ -82,10 +82,4 @@
               "Content-Length" (str (.length #^File body))))
           resp)))))
   ([app]
-   (wrap {} app)))
-
-
-(defn -main [& args]
-  (jetty/run-jetty (->> file/app
-                        (file/wrap (java.io.File. "resources"))
-                        wrap)))
+   (wrap app {})))

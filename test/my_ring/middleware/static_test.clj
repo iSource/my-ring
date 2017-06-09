@@ -4,4 +4,4 @@
             [my-ring.handler.dump :as dump]))
 
 (deftest static-test
-  (is ((complement nil?) (wrap "resources" ["my"] dump/app))))
+  (is ((complement nil?) (wrap dump/app "resources" ["my"]))))

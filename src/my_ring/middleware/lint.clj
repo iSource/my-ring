@@ -30,10 +30,3 @@
     (let [resp (app request)]
       (check-resp resp)
       resp)))
-
-(defn app [request]
-  {:status 200
-   :body "<h1>Good</h1>"})
-
-(defn -main [& args]
-  (jetty/run-jetty (-> app wrap)))

@@ -3,15 +3,8 @@
             [my-ring.adapter.jetty :as jetty]))
 
 (defn wrap
-  [reloadables app]
+  [app reloadables]
   (fn [request]
     (doseq [sym reloadables]
       (require sym :reload))
     (app request)))
-
-(defn -main [& args]
-  (jetty/run-jetty (->> #'my-ring.handler.dump/app
-                        (wrap '(my-ring.handler.dump)))))
-
-#_(defn -main [& args]
-    (jetty/run-jetty #'my-ring.handler.dump/app))

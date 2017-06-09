@@ -52,11 +52,11 @@
 
 
 (defn wrap-params
-  ([override handler]
+  ([handler override]
    (fn [req]
      (-> req
          (assoc-query-params override)
          (assoc-form-params override)
          handler)))
   ([handler]
-   (wrap-params false handler)))
+   (wrap-params handler false)))

@@ -11,7 +11,7 @@
 (def unknown-file (File. "resources/random.www"))
 (def unknown-file-app (wrap (constantly {:headers {} :body unknown-file})))
 
-(def unknown-file-app-with-custom (wrap {"www" "text/mytype"} (constantly {:headers {} :body unknown-file})))
+(def unknown-file-app-with-custom (wrap (constantly {:headers {} :body unknown-file}) {"www" "text/mytype"}))
 
 (deftest non-file-test
   (is (= {:headers {} :body "body"} (non-file-app {}))))
