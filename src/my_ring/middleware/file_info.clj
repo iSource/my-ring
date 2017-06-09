@@ -79,7 +79,7 @@
         (if (instance? File body)
           (assoc resp :headers
             (assoc headers "Content-Type" (guess-mime-type body mime-types)
-              "Content-Length" (str (.length body))))
+              "Content-Length" (str (.length #^File body))))
           resp)))))
   ([app]
    (wrap {} app)))

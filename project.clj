@@ -11,5 +11,6 @@
                  [clj-stacktrace "0.2.8"]
                  [commons-io/commons-io "2.5"]]
   :main ^:skip-aot my-ring.dump
+  :global-vars {*warn-on-reflection* true}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

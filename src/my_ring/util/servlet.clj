@@ -58,11 +58,11 @@
             (.flush writer)))
         (instance? InputStream body)
         (with-open [out (.getOutputStream response)]
-          (IOUtils/copy body out)
-          (.close body)
+          (IOUtils/copy #^InputStream body out)
+          (.close #^InputStream body)
           (.flush out))
         (instance? File body)
-        (with-open [stream (FileInputStream. body)]
+        (with-open [stream (FileInputStream. #^File body)]
           (set-body response stream))
         (nil? body)
         nil

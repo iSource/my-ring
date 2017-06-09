@@ -1,6 +1,7 @@
 (ns my-ring.adapter.jetty
-  (:import (org.eclipse.jetty.server Server)
-           (org.eclipse.jetty.server.handler AbstractHandler))
+  (:import (org.eclipse.jetty.server Server Request)
+           (org.eclipse.jetty.server.handler AbstractHandler)
+           (javax.servlet.http HttpServletRequest HttpServletResponse))
   (:use my-ring.util.servlet))
 
 #_(defn- add-ssl-connector!
@@ -17,22 +18,21 @@
 
 (defn- create-server
   [options]
-  (let [port (options :port 3000)]
-    (doto
-      (Server. port))))
+  (let [#^Integer port (options :port 3000)]
+    (Server. port)))
 
 (defn- proxy-handler
   [handler]
   (proxy [AbstractHandler] []
-    (handle [target base-request request response]
+    (handle [target #^Request base-request #^HttpServletRequest request #^HttpServletResponse response]
       (let [req-map (build-request-map request)
             resp-map (handler req-map)]
         (update-servlet-response response resp-map)
-        (.setHandled request true)))))
+        (.setHandled base-request true)))))
 
 (defn run-jetty
   ([app options]
-    (doto (create-server options)
+    (doto #^Server (create-server options)
       (.setHandler (proxy-handler app))
       (.start)
       (.join)))
@@ -47,4 +47,4 @@
 
 (defn -main
   [& args]
-  (run-jetty app {:port 3000}))
+  (run-jetty app {:port 3000 :host "10.1.2.3"}))

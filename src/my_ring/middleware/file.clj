@@ -4,7 +4,7 @@
   (:require [my-ring.adapter.jetty :as jetty]))
 
 (defn- ensure-dir
-  [dir]
+  [#^File dir]
   (throw-if-not (.exists dir)
                 "Directory does not exist: %s" dir))
 
@@ -17,13 +17,13 @@
 
 
 (defn- success
-  [file]
+  [#^File file]
   {:status 200
    :headers {}
    :body file})
 
 (defn- maybe-file
-  [dir path]
+  [#^File dir #^String path]
   (let [file (java.io.File. dir path)]
     (and (.exists file) (.canRead file) file)))
 
@@ -34,7 +34,7 @@
    :body "<h1>Not File I'm APP</h1>"})
 
 (defn wrap
-  [dir app]
+  [#^File dir app]
   (ensure-dir dir)
   (fn [request]
     (if (#{:get :head} (:request-method request))

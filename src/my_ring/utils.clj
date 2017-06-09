@@ -1,8 +1,8 @@
 (ns my-ring.utils)
 
 (defn throwf
-  [message & args]
-  (throw (Exception.
+  [#^String message & args]
+  (throw (Exception. #^String
            (apply format (cons message args)))))
 
 (defn throw-if-not
@@ -16,5 +16,5 @@
   (java.net.URLDecoder/decode encoded "UTF-8"))
 
 (defn string-include?
-  [target string]
+  [#^String target #^String string]
   (>= (.indexOf string target) 0))
