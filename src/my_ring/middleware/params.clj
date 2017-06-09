@@ -2,8 +2,6 @@
   (:require [clojure.string :as str])
   (:import java.net.URLDecoder))
 
-(def *encoding* "UTF-8")
-
 (defn- url-decode
   [encoded encoding]
   (URLDecoder/decode encoded encoding))

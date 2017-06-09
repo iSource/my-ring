@@ -12,3 +12,7 @@ pom.xml.asc
 .lein-failures
 .nrepl-port
 *.swp
+
+*.swp
+
+src/my_ring/example/.wrapping.clj.swp
