@@ -1,8 +1,8 @@
 (ns my-ring.util.servlet
   (:require [clojure.string :as str]
-            [my-ring.utils :as util])
+            [my-ring.utils :as util]
+            [clojure.java.io :as io])
   (:import (javax.servlet.http HttpServlet HttpServletRequest HttpServletResponse)
-           (org.apache.commons.io IOUtils)
            (java.io File InputStream FileInputStream)))
 
 (defn- get-headers
@@ -58,7 +58,7 @@
             (.flush writer)))
         (instance? InputStream body)
         (with-open [out (.getOutputStream response)]
-          (IOUtils/copy #^InputStream body out)
+          (io/copy #^InputStream body out)
           (.close #^InputStream body)
           (.flush out))
         (instance? File body)

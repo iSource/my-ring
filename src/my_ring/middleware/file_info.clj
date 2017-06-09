@@ -1,8 +1,7 @@
 (ns my-ring.middleware.file-info
   (:require [my-ring.adapter.jetty :as jetty]
             [my-ring.middleware.file :as file])
-  (:import org.apache.commons.io.FilenameUtils
-           java.io.File))
+  (:import java.io.File))
 
 (def base-mime-types
   {"ai"    "application/postscript"
@@ -61,9 +60,13 @@
    "swf"   "application/x-shockwave-flash"
    "zip"   "application/zip"})
 
+(defn- get-extension
+  [#^File file]
+  (second (re-find #"\.([^./\\]+)$" (.getPath file))))
+
 (defn- guess-mime-type
   [#^File file mime-types]
-  (get mime-types (FilenameUtils/getExtension (.getPath file))
+  (get mime-types (get-extension file)
        "application/octet-stream"))
 
 (defn- rand-gen-error

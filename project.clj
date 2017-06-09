@@ -8,8 +8,7 @@
                  [org.eclipse.jetty/jetty-server "9.4.5.v20170502"]
                  [hiccup "1.0.5"]
                  [ring/ring-mock "0.3.0"]
-                 [clj-stacktrace "0.2.8"]
-                 [commons-io/commons-io "2.5"]]
+                 [clj-stacktrace "0.2.8"]]
   :main ^:skip-aot my-ring.dump
   :global-vars {*warn-on-reflection* true}
   :target-path "target/%s"
