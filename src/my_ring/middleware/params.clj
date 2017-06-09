@@ -5,8 +5,8 @@
 (def *encoding* "UTF-8")
 
 (defn- url-decode
-  [encoded]
-  (URLDecoder/decode encoded *encoding*))
+  [encoded encoding]
+  (URLDecoder/decode encoded encoding))
 
 (defn- assoc-vec
   [params-map param]
@@ -19,11 +19,11 @@
               params-map param))
 
 (defn- parse-params
-  [#^String params-string override]
+  [#^String params-string encoding override]
   (reduce (fn [params-map param-pair]
             (let [[_ key value] (re-matches #"([^=]+)=(.*)" param-pair)]
-              (let [decoded-key (url-decode key)
-                    decoded-value (url-decode value)]
+              (let [decoded-key (url-decode (or key "") encoding)
+                    decoded-value (url-decode (or value "") encoding)]
                 (if override
                   (assoc params-map decoded-key decoded-value)
                   (assoc-vec params-map {decoded-key decoded-value})))))
@@ -32,9 +32,9 @@
 
 
 (defn- assoc-query-params
-  [request override]
+  [request encoding override]
   (if-let [#^String query-string (:query-string request)]
-    (let [params (parse-params query-string override)]
+    (let [params (parse-params query-string encoding override)]
       (merge-with merge request {:query-params params :params params}))
     request))
 
@@ -44,19 +44,21 @@
     (str/starts-with? content-type "application/x-www-form-urlencoded")))
 
 (defn- assoc-form-params
-  [request override]
+  [request encoding override]
   (if-let [body (and (urlencoded-form? request) (:body request))]
-    (let [params (parse-params (slurp body) override)]
+    (let [params (parse-params (slurp body) encoding override)]
       (merge-with merge request {:form-params params :params params}))
     request))
 
 
 (defn wrap-params
-  ([handler override]
+  ([handler encoding override]
    (fn [req]
      (-> req
-         (assoc-query-params override)
-         (assoc-form-params override)
+         (assoc-query-params encoding override)
+         (assoc-form-params encoding override)
          handler)))
+  ([handler encoding]
+   (wrap-params handler encoding false))
   ([handler]
-   (wrap-params handler false)))
+   (wrap-params handler "UTF-8" false)))
