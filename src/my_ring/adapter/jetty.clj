@@ -32,10 +32,16 @@
 
 (defn run-jetty
   ([app options]
-    (doto #^Server (create-server options)
-      (.setHandler (proxy-handler app))
-      (.start)
-      (.join)))
+   (let [#^Server s (create-server (dissoc options :configurator))]
+     (when-let [configurator (:configurator options)]
+       (configurator s))
+     (doto s
+       (.setHandler (proxy-handler app))
+       (.start))
+
+     (when (:jon options true)
+       (.join s))
+     s))
   ([app]
    (run-jetty app {})))
 

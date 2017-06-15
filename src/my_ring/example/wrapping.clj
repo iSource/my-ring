@@ -12,5 +12,11 @@
        my-ring.middleware.file-info/wrap
        my-ring.middleware.stacktrace/wrap))
 
+(defn- jetty-configurator
+  [server]
+  (println "**********************")
+  (println "* Jetty Server Start *")
+  (println "**********************"))
+
 (defn -main [& args]
-  (my-ring.adapter.jetty/run-jetty app))
+  (my-ring.adapter.jetty/run-jetty app {:configurator jetty-configurator}))
